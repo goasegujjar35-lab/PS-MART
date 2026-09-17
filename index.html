@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS MART | Premium Watches</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#fff;
+    color:#151515;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+
+.topbar{
+    background:#111;
+    color:#fff;
+    text-align:center;
+    padding:9px;
+    font-size:13px;
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:#fff;
+    border-bottom:1px solid #eee;
+}
+
+.nav{
+    max-width:1200px;
+    margin:auto;
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+}
+
+.logo{
+    font-size:27px;
+    font-weight:900;
+    color:#d71920;
+    letter-spacing:-1px;
+}
+.logo span{color:#111}
+
+.navlinks{
+    display:flex;
+    gap:28px;
+    font-size:14px;
+    font-weight:bold;
+}
+.navlinks a:hover{color:#d71920}
+
+.actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+.iconbtn{
+    border:0;
+    background:#f6f6f6;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:17px;
+}
+.cartCount{
+    background:#d71920;
+    color:#fff;
+    border-radius:50%;
+    font-size:10px;
+    padding:3px 6px;
+    position:absolute;
+    margin:-27px 0 0 24px;
+}
+
+.hero{
+    min-height:570px;
+    display:flex;
+    align-items:center;
+    background:
+      linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.28)),
+      url("https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1800&q=85")
+      center/cover;
+    color:#fff;
+}
+
+.heroContent{
+    max-width:1200px;
+    width:100%;
+    margin:auto;
+    padding:60px 20px;
+}
+.hero small{
+    color:#ff3340;
+    font-weight:bold;
+    letter-spacing:3px;
+}
+.hero h1{
+    font-size:64px;
+    max-width:650px;
+    margin:18px 0;
+    line-height:1;
+}
+.hero p{
+    max-width:520px;
+    color:#eee;
+    line-height:1.7;
+}
+.btn{
+    display:inline-block;
+    border:0;
+    background:#d71920;
+    color:#fff;
+    padding:15px 27px;
+    margin-top:28px;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:3px;
+}
+.btn:hover{background:#b91017}
+
+.section{
+    max-width:1200px;
+    margin:auto;
+    padding:75px 20px;
+}
+.sectionHead{
+    text-align:center;
+    margin-bottom:38px;
+}
+.sectionHead span{
+    color:#d71920;
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+.sectionHead h2{
+    font-size:36px;
+    margin-top:10px;
+}
+
+.categories{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+.cat{
+    height:270px;
+    display:flex;
+    align-items:end;
+    padding:25px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    background-size:cover;
+    background-position:center;
+}
+.cat:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(transparent,rgba(0,0,0,.8));
+}
+.cat div{position:relative}
+.cat h3{font-size:25px}
+.cat p{font-size:13px;margin-top:6px}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:22px;
+}
+.product{
+    border:1px solid #eee;
+    background:#fff;
+    position:relative;
+    overflow:hidden;
+    transition:.25s;
+}
+.product:hover{
+    transform:translateY(-5px);
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+.productImg{
+    height:270px;
+    background:#f7f7f7;
+    position:relative;
+}
+.productImg img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.badge{
+    position:absolute;
+    top:12px;
+    left:12px;
+    background:#d71920;
+    color:#fff;
+    padding:6px 10px;
+    font-size:11px;
+    font-weight:bold;
+}
+.productInfo{padding:17px}
+.productInfo small{color:#777}
+.productInfo h3{
+    margin:7px 0;
+    font-size:16px;
+}
+.price{
+    font-weight:bold;
+    color:#d71920;
+}
+.old{
+    color:#999;
+    text-decoration:line-through;
+    font-size:13px;
+    margin-left:7px;
+}
+.add{
+    width:100%;
+    border:0;
+    background:#111;
+    color:#fff;
+    padding:12px;
+    margin-top:14px;
+    cursor:pointer;
+    font-weight:bold;
+}
+.add:hover{background:#d71920}
+
+.offer{
+    background:#111;
+    color:#fff;
+    padding:65px 20px;
+    text-align:center;
+}
+.offer h2{font-size:40px}
+.offer p{margin-top:12px;color:#ccc}
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid #eee;
+    border-bottom:1px solid #eee;
+}
+.feature{
+    padding:32px 15px;
+    text-align:center;
+    border-right:1px solid #eee;
+}
+.feature:last-child{border:0}
+.feature b{display:block;margin-bottom:8px}
+.feature span{font-size:13px;color:#777}
+
+.newsletter{
+    background:#f7f7f7;
+    text-align:center;
+    padding:65px 20px;
+}
+.newsletter h2{font-size:30px}
+.newsletter p{color:#666;margin:10px 0 22px}
+.newsletter form{
+    max-width:500px;
+    margin:auto;
+    display:flex;
+}
+.newsletter input{
+    flex:1;
+    padding:15px;
+    border:1px solid #ddd;
+    outline:0;
+}
+.newsletter button{
+    background:#d71920;
+    color:#fff;
+    border:0;
+    padding:0 22px;
+    font-weight:bold;
+}
+
+footer{
+    background:#111;
+    color:#fff;
+    padding:55px 20px 20px;
+}
+.footerGrid{
+    max-width:1200px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:40px;
+}
+footer h3{margin-bottom:18px}
+footer p,footer a{
+    color:#aaa;
+    font-size:13px;
+    line-height:2;
+}
+footer a:hover{color:#fff}
+.copy{
+    max-width:1200px;
+    margin:40px auto 0;
+    padding-top:20px;
+    border-top:1px solid #333;
+    color:#777;
+    font-size:12px;
+}
+
+.whatsapp{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:2000;
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:#25D366;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+    box-shadow:0 5px 20px rgba(0,0,0,.25);
+}
+
+.cartPanel{
+    position:fixed;
+    right:-420px;
+    top:0;
+    width:400px;
+    max-width:100%;
+    height:100vh;
+    background:#fff;
+    z-index:3000;
+    box-shadow:-10px 0 35px rgba(0,0,0,.15);
+    transition:.3s;
+    padding:25px;
+}
+.cartPanel.open{right:0}
+.cartHead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #eee;
+    padding-bottom:18px;
+}
+.close{
+    border:0;
+    background:#eee;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    cursor:pointer;
+}
+.cartItems{padding:20px 0;overflow:auto;height:65%}
+.cartItem{
+    display:flex;
+    gap:12px;
+    border-bottom:1px solid #eee;
+    padding:12px 0;
+}
+.cartItem img{width:65px;height:65px;object-fit:cover}
+.cartItem h4{font-size:14px}
+.cartTotal{
+    border-top:1px solid #ddd;
+    padding-top:18px;
+    font-weight:bold;
+    display:flex;
+    justify-content:space-between;
+}
+
+@media(max-width:900px){
+    .navlinks{display:none}
+    .products{grid-template-columns:repeat(2,1fr)}
+    .features{grid-template-columns:repeat(2,1fr)}
+    .feature{border-bottom:1px solid #eee}
+    .footerGrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+    .hero{min-height:500px}
+    .hero h1{font-size:43px}
+    .categories{grid-template-columns:1fr}
+    .products{grid-template-columns:1fr 1fr;gap:10px}
+    .productImg{height:190px}
+    .section{padding:50px 12px}
+    .sectionHead h2{font-size:28px}
+    .footerGrid{grid-template-columns:1fr}
+    .newsletter form{flex-direction:column;gap:8px}
+    .newsletter button{height:48px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+    Free Delivery on Selected Orders | Premium Watches in Pakistan
+</div>
+
+<header>
+<nav class="nav">
+    <a href="#" class="logo">PS <span>MART</span></a>
+
+    <div class="navlinks">
+        <a href="#home">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#men">Men</a>
+        <a href="#women">Women</a>
+        <a href="#couple">Couple</a>
+        <a href="#sale">Sale</a>
+    </div>
+
+    <div class="actions">
+        <button class="iconbtn" onclick="focusSearch()">⌕</button>
+        <button class="iconbtn" onclick="openCart()">🛒</button>
+        <span class="cartCount" id="cartCount">0</span>
+    </div>
+</nav>
+</header>
+
+<main id="home">
+
+<section class="hero">
+    <div class="heroContent">
+        <small>PS MART COLLECTION</small>
+        <h1>TIME<br>MADE PREMIUM.</h1>
+        <p>
+            Discover stylish and premium watches designed
+            for your everyday look. Shop the latest collection
+            from PS MART.
+        </p>
+        <a href="#shop" class="btn">SHOP COLLECTION</a>
+    </div>
+</section>
+
+<section class="section">
+    <div class="sectionHead">
+        <span>SHOP BY STYLE</span>
+        <h2>Find Your Watch</h2>
+    </div>
+
+    <div class="categories">
+        <a class="cat" id="men"
+           style="background-image:url('https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80')"
+           href="#shop">
+            <div>
+                <h3>Men's Watches</h3>
+                <p>Explore Collection →</p>
+            </div>
+        </a>
+
+        <a class="cat" id="women"
+           style="background-image:url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=900&q=80')"
+           href="#shop">
+            <div>
+                <h3>Women's Watches</h3>
+                <p>Explore Collection →</p>
+            </div>
+        </a>
+
+        <a class="cat" id="couple"
+           style="background-image:url('https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=900&q=80')"
+           href="#shop">
+            <div>
+                <h3>Couple Watches</h3>
+                <p>Explore Collection →</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section class="section" id="shop">
+    <div class="sectionHead">
+        <span>PS MART</span>
+        <h2>Featured Watches</h2>
+    </div>
+
+    <div class="products" id="productGrid"></div>
+</section>
+
+<section class="offer" id="sale">
+    <h2>Special Watch Sale</h2>
+    <p>Upgrade your style with selected watches at special prices.</p>
+    <a href="#shop" class="btn">SHOP SALE</a>
+</section>
+
+<section class="features">
+    <div class="feature">
+        <b>🚚 Fast Delivery</b>
+        <span>Delivery across Pakistan</span>
+    </div>
+    <div class="feature">
+        <b>🔒 Secure Shopping</b>
+        <span>Safe & easy ordering</span>
+    </div>
+    <div class="feature">
+        <b>✓ Quality Products</b>
+        <span>Selected premium watches</span>
+    </div>
+    <div class="feature">
+        <b>💬 Customer Support</b>
+        <span>WhatsApp support available</span>
+    </div>
+</section>
+
+<section class="newsletter">
+    <h2>Join PS MART</h2>
+    <p>Get updates about new watches and special offers.</p>
+    <form onsubmit="subscribe(event)">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit">SUBSCRIBE</button>
+    </form>
+</section>
+
+</main>
+
+<footer>
+<div class="footerGrid">
+    <div>
+        <div class="logo">PS <span style="color:#fff">MART</span></div>
+        <p>
+            Premium watches for men, women and couples.
+            Discover your next favourite timepiece.
+        </p>
+    </div>
+
+    <div>
+        <h3>Shop</h3>
+        <a href="#shop">Men Watches</a><br>
+        <a href="#shop">Women Watches</a><br>
+        <a href="#shop">Couple Watches</a><br>
+        <a href="#sale">Sale</a>
+    </div>
+
+    <div>
+        <h3>Information</h3>
+        <a href="#">About Us</a><br>
+        <a href="#">Shipping Policy</a><br>
+        <a href="#">Return Policy</a><br>
+        <a href="#">Privacy Policy</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <p>WhatsApp: 03440681490</p>
+        <p>Pakistan</p>
+    </div>
+</div>
+
+<div class="copy">
+    © 2026 PS MART. All Rights Reserved.
+</div>
+</footer>
+
+<a class="whatsapp"
+   href="https://wa.me/923440681490?text=Assalam-o-Alaikum%2C%20PS%20MART%20se%20watch%20ke%20bare%20mein%20maloomat%20chahiye."
+   target="_blank"
+   aria-label="WhatsApp">
+    ☎
+</a>
+
+<div class="cartPanel" id="cartPanel">
+    <div class="cartHead">
+        <h2>Your Cart</h2>
+        <button class="close" onclick="closeCart()">×</button>
+    </div>
+
+    <div class="cartItems" id="cartItems"></div>
+
+    <div class="cartTotal">
+        <span>Total</span>
+        <span id="cartTotal">Rs. 0</span>
+    </div>
+
+    <button class="btn" style="width:100%" onclick="checkout()">
+        ORDER ON WHATSAPP
+    </button>
+</div>
+
+<script>
+const products = [
+    {
+        id:1,
+        name:"Classic Black Watch",
+        category:"Men",
+        price:3499,
+        oldPrice:4499,
+        image:"https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=80"
+    },
+    {
+        id:2,
+        name:"Luxury Silver Watch",
+        category:"Men",
+        price:3999,
+        oldPrice:4999,
+        image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80"
+    },
+    {
+        id:3,
+        name:"Elegant Women's Watch",
+        category:"Women",
+        price:2999,
+        oldPrice:3999,
+        image:"https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=700&q=80"
+    },
+    {
+        id:4,
+        name:"Premium Couple Set",
+        category:"Couple",
+        price:5999,
+        oldPrice:7499,
+        image:"https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=700&q=80"
+    }
+];
+
+let cart = [];
+
+function renderProducts(){
+    const grid=document.getElementById("productGrid");
+
+    grid.innerHTML=products.map(p=>`
+        <div class="product">
+            <div class="productImg">
+                <span class="badge">SALE</span>
+                <img src="${p.image}" alt="${p.name}">
+            </div>
+            <div class="productInfo">
+                <small>${p.category}</small>
+                <h3>${p.name}</h3>
+                <span class="price">Rs. ${p.price.toLocaleString()}</span>
+                <span class="old">Rs. ${p.oldPrice.toLocaleString()}</span>
+                <button class="add" onclick="addToCart(${p.id})">
+                    ADD TO CART
+                </button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function addToCart(id){
+    const product=products.find(p=>p.id===id);
+    cart.push(product);
+    updateCart();
+    openCart();
+}
+
+function updateCart(){
+    document.getElementById("cartCount").textContent=cart.length;
+
+    const items=document.getElementById("cartItems");
+
+    if(cart.length===0){
+        items.innerHTML="<p style='color:#777'>Your cart is empty.</p>";
+    }else{
+        items.innerHTML=cart.map((p,index)=>`
+            <div class="cartItem">
+                <img src="${p.image}">
+                <div style="flex:1">
+                    <h4>${p.name}</h4>
+                    <p style="color:#d71920;margin-top:6px">
+                        Rs. ${p.price.toLocaleString()}
+                    </p>
+                    <button onclick="removeItem(${index})"
+                    style="border:0;background:none;color:#999;cursor:pointer;margin-top:5px">
+                    Remove
+                    </button>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    const total=cart.reduce((sum,p)=>sum+p.price,0);
+    document.getElementById("cartTotal").textContent=
+        "Rs. "+total.toLocaleString();
+}
+
+function removeItem(index){
+    cart.splice(index,1);
+    updateCart();
+}
+
+function openCart(){
+    document.getElementById("cartPanel").classList.add("open");
+}
+
+function closeCart(){
+    document.getElementById("cartPanel").classList.remove("open");
+}
+
+function checkout(){
+    if(cart.length===0){
+        alert("Your cart is empty.");
+        return;
+    }
+
+    let message="Assalam-o-Alaikum, PS MART mein order karna hai:%0A%0A";
+
+    cart.forEach((p,i)=>{
+        message+=(i+1)+". "+p.name+
+        " - Rs. "+p.price+"%0A";
+    });
+
+    const total=cart.reduce((sum,p)=>sum+p.price,0);
+
+    message+="%0ATotal: Rs. "+total+
+             "%0A%0AMy Name:%0AMy Address:";
+
+    window.open(
+        "https://wa.me/923440681490?text="+message,
+        "_blank"
+    );
+}
+
+function subscribe(e){
+    e.preventDefault();
+    alert("Thank you for subscribing to PS MART!");
+    e.target.reset();
+}
+
+function focusSearch(){
+    alert("Search system will be connected with the Admin/Product database.");
+}
+
+renderProducts();
+updateCart();
+</script>
+
+</body>
+</html>
