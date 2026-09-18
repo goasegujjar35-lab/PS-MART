@@ -3,1002 +3,890 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PS MART | Admin Panel</title>
+<title>PS MART — Admin Panel</title>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 body{
-    font-family:Arial,sans-serif;
-    background:#f5f5f5;
-    color:#151515;
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:#f5f5f5;
+ color:#222;
 }
-button,input,textarea,select{font:inherit}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+:root{
+ --red:#d71920;
+ --dark:#151515;
+ --light:#fff;
+ --border:#e5e5e5;
+}
+
 .login{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:#111;
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:linear-gradient(135deg,#111,#d71920);
+ padding:20px;
 }
-.loginBox{
-    width:100%;
-    max-width:400px;
-    background:#fff;
-    padding:35px;
-    border-radius:12px;
-    box-shadow:0 20px 60px #0008;
+.login-box{
+ width:100%;
+ max-width:420px;
+ background:white;
+ padding:35px;
+ border-radius:18px;
+ box-shadow:0 20px 60px #0005;
 }
-.brand{
-    text-align:center;
-    font-size:30px;
-    font-weight:900;
-    margin-bottom:8px;
-    color:#d71920;
+.logo{
+ font-size:32px;
+ font-weight:900;
+ text-align:center;
+ margin-bottom:8px;
 }
-.brand span{color:#111}
-.loginBox p{text-align:center;color:#777;margin-bottom:25px}
-.field{margin-bottom:16px}
+.logo span{color:var(--red)}
+.login-box p{text-align:center;color:#777}
+.field{margin:15px 0}
 .field label{
-    display:block;
-    font-size:13px;
-    font-weight:bold;
-    margin-bottom:7px;
+ display:block;
+ font-weight:bold;
+ margin-bottom:7px;
 }
-.field input,.field textarea,.field select{
-    width:100%;
-    border:1px solid #ddd;
-    padding:12px;
-    border-radius:6px;
-    outline:none;
-    background:#fff;
+input,select,textarea{
+ width:100%;
+ border:1px solid #ddd;
+ border-radius:9px;
+ padding:12px;
+ outline:none;
+ background:#fff;
 }
-.field input:focus,.field textarea:focus,.field select:focus{
-    border-color:#d71920;
+input:focus,select:focus,textarea:focus{
+ border-color:var(--red);
 }
+textarea{min-height:120px;resize:vertical}
+
 .btn{
-    border:0;
-    background:#d71920;
-    color:#fff;
-    padding:12px 18px;
-    border-radius:6px;
-    cursor:pointer;
-    font-weight:bold;
+ border:0;
+ border-radius:9px;
+ padding:11px 16px;
+ font-weight:bold;
 }
-.btn:hover{background:#b91017}
-.btn.dark{background:#111}
-.btn.gray{background:#777}
-.btn.danger{background:#b00020}
-.hidden{display:none!important}
+.btn-red{background:var(--red);color:white}
+.btn-dark{background:#181818;color:white}
+.btn-light{background:#eee;color:#222}
+.btn-danger{background:#b00020;color:white}
+.btn-green{background:#198754;color:white}
 
-.app{min-height:100vh}
+.login-btn{
+ width:100%;
+ padding:14px;
+ margin-top:8px;
+}
+
+.error{
+ color:#d71920;
+ text-align:center;
+ margin-top:12px;
+ font-weight:bold;
+}
+
+.app{display:none;min-height:100vh}
+
 .sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:245px;
-    background:#111;
-    color:#fff;
-    padding:25px 15px;
-    z-index:100;
+ position:fixed;
+ left:0;
+ top:0;
+ bottom:0;
+ width:250px;
+ background:#151515;
+ color:white;
+ padding:20px 15px;
+ overflow:auto;
+ z-index:100;
 }
-.sideBrand{
-    font-size:24px;
-    font-weight:900;
-    color:#d71920;
-    padding:0 12px 25px;
-    border-bottom:1px solid #333;
+.side-logo{
+ font-size:27px;
+ font-weight:900;
+ padding:10px 12px 25px;
 }
-.sideBrand span{color:#fff}
-.menu{margin-top:20px}
-.menu button{
-    width:100%;
-    text-align:left;
-    border:0;
-    background:none;
-    color:#bbb;
-    padding:13px 14px;
-    margin:3px 0;
-    border-radius:6px;
-    cursor:pointer;
-}
-.menu button:hover,.menu button.active{
-    background:#d71920;
-    color:#fff;
-}
-.logout{
-    position:absolute;
-    bottom:25px;
-    left:15px;
-    width:215px;
-    background:#222!important;
-}
-.main{
-    margin-left:245px;
-    padding:25px;
-}
-.top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
-}
-.top h1{font-size:28px}
-.mobileMenu{display:none}
+.side-logo span{color:#e51b23}
 
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:18px;
-    margin-bottom:25px;
+.nav button{
+ display:block;
+ width:100%;
+ background:transparent;
+ color:#ddd;
+ border:0;
+ padding:13px 14px;
+ text-align:left;
+ border-radius:8px;
+ margin:3px 0;
+ font-weight:bold;
 }
-.stat{
-    background:#fff;
-    padding:22px;
-    border-radius:10px;
-    border-left:4px solid #d71920;
-    box-shadow:0 3px 15px #00000008;
+.nav button:hover,.nav button.active{
+ background:var(--red);
+ color:white;
 }
-.stat small{color:#777}
-.stat h2{margin-top:8px}
+
+.logout{
+ margin-top:25px;
+ width:100%;
+}
+
+.main{
+ margin-left:250px;
+ padding:25px;
+}
+
+.top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ margin-bottom:25px;
+}
+.top h1{margin:0}
+.mobile-menu{display:none}
+
+.section{display:none}
+.section.active{display:block}
+
+.cards{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:15px;
+ margin-bottom:25px;
+}
+.card{
+ background:white;
+ border-radius:13px;
+ padding:20px;
+ border:1px solid var(--border);
+}
+.card small{color:#777}
+.card h2{margin:8px 0 0}
 
 .panel{
-    background:#fff;
-    border-radius:10px;
-    padding:25px;
-    margin-bottom:25px;
-    box-shadow:0 3px 15px #00000008;
+ background:white;
+ border:1px solid var(--border);
+ border-radius:13px;
+ padding:22px;
+ margin-bottom:20px;
 }
-.panelHead{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
-.panelHead h2{font-size:20px}
+.panel h2{margin-top:0}
 
 .grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:18px;
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:16px;
 }
-.full{grid-column:1/-1}
+.grid-3{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:16px;
+}
 
-.productTable{
-    width:100%;
-    border-collapse:collapse;
+.actions{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:15px;
 }
-.productTable th,.productTable td{
-    padding:12px 8px;
-    border-bottom:1px solid #eee;
-    text-align:left;
-    font-size:13px;
-}
-.productTable th{background:#fafafa}
-.pimg{
-    width:55px;
-    height:55px;
-    object-fit:cover;
-    border-radius:5px;
-}
-.actions{display:flex;gap:6px;flex-wrap:wrap}
-.smallBtn{
-    border:0;
-    padding:7px 10px;
-    border-radius:4px;
-    cursor:pointer;
-    color:#fff;
-    background:#111;
-    font-size:12px;
-}
-.smallBtn.red{background:#d71920}
-.smallBtn.gray{background:#777}
 
-.order{
-    border:1px solid #eee;
-    padding:15px;
-    border-radius:7px;
-    margin-bottom:10px;
+.table-wrap{overflow:auto}
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:700px;
 }
-.orderTop{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
+th,td{
+ padding:12px;
+ border-bottom:1px solid #eee;
+ text-align:left;
 }
+th{background:#fafafa}
+
+.product-img{
+ width:55px;
+ height:55px;
+ object-fit:cover;
+ border-radius:8px;
+}
+
 .status{
-    padding:5px 9px;
-    border-radius:20px;
-    background:#eee;
-    font-size:11px;
-}
-.empty{
-    text-align:center;
-    padding:35px;
-    color:#888;
+ padding:5px 9px;
+ border-radius:20px;
+ background:#eee;
+ font-size:12px;
+ font-weight:bold;
 }
 
-.switch{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.check{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ margin:12px 0;
 }
-.switch input{width:18px;height:18px}
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:#0009;
-    z-index:500;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-.modal.show{display:flex}
-.modalBox{
-    background:#fff;
-    width:100%;
-    max-width:600px;
-    max-height:90vh;
-    overflow:auto;
-    padding:25px;
-    border-radius:10px;
-}
-.modalHead{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:20px;
-}
-.close{
-    border:0;
-    background:#eee;
-    width:35px;
-    height:35px;
-    border-radius:50%;
-    cursor:pointer;
-}
-.preview{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    background:#f5f5f5;
-    margin-top:8px;
-    border-radius:7px;
-}
+.check input{width:auto;height:18px;width:18px;cursor:pointer}
 
 @media(max-width:900px){
-    .sidebar{
-        transform:translateX(-100%);
-        transition:.25s;
-    }
-    .sidebar.open{transform:translateX(0)}
-    .main{margin-left:0}
-    .mobileMenu{
-        display:block;
-        border:0;
-        background:#111;
-        color:#fff;
-        padding:10px 13px;
-        border-radius:5px;
-        cursor:pointer;
-    }
-    .stats{grid-template-columns:repeat(2,1fr)}
+ .sidebar{width:220px;}
+ .main{margin-left:220px}
+ .cards{grid-template-columns:repeat(2,1fr)}
+ .grid-3{grid-template-columns:1fr 1fr}
 }
-@media(max-width:600px){
-    .main{padding:15px}
-    .top h1{font-size:21px}
-    .stats{grid-template-columns:1fr 1fr;gap:10px}
-    .stat{padding:15px}
-    .grid{grid-template-columns:1fr}
-    .full{grid-column:auto}
-    .productTable{display:block;overflow-x:auto}
+
+@media(max-width:700px){
+ .sidebar{
+  transform:translateX(-100%);
+  transition:.25s;
+  z-index:100;
+ }
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0;padding:15px}
+ .mobile-menu{display:block}
+ .cards,.grid,.grid-3{grid-template-columns:1fr}
+ .top h1{font-size:22px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div class="login" id="loginPage">
-    <div class="loginBox">
-        <div class="brand">PS <span>MART</span></div>
-        <p>Admin Panel Login</p>
+<!-- ================= LOGIN ================= -->
+<div id="loginPage" class="login">
+ <div class="login-box">
+  <div class="logo">PS <span>MART</span></div>
+  <p>Admin Panel Login</p>
 
-        <div class="field">
-            <label>Email</label>
-            <input id="loginEmail" type="email"
-                   placeholder="Admin Email">
-        </div>
+  <form id="loginForm">
+   <div class="field">
+    <label>Email</label>
+    <input id="loginEmail" type="email" placeholder="Admin email" required>
+   </div>
 
-        <div class="field">
-            <label>Password</label>
-            <input id="loginPassword" type="password"
-                   placeholder="Password">
-        </div>
+   <div class="field">
+    <label>Password</label>
+    <input id="loginPassword" type="password" placeholder="Password" required>
+   </div>
 
-        <button class="btn" style="width:100%" onclick="login()">
-            LOGIN
-        </button>
+   <button class="btn btn-red login-btn" type="submit">
+    Login to Dashboard
+   </button>
 
-        <p id="loginError"
-           style="color:#d71920;margin-top:15px;display:none">
-           Invalid email or password
-        </p>
-    </div>
+   <div id="loginError" class="error"></div>
+  </form>
+ </div>
 </div>
 
+<!-- ================= APP ================= -->
+<div id="app" class="app">
 
-<!-- ADMIN APP -->
-<div class="app hidden" id="adminApp">
+<aside id="sidebar" class="sidebar">
+ <div class="side-logo">PS <span>MART</span></div>
 
-<aside class="sidebar" id="sidebar">
-    <div class="sideBrand">PS <span>MART</span></div>
+ <div class="nav">
+  <button class="active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+  <button onclick="showSection('products',this)">⌚ Products</button>
+  <button onclick="showSection('orders',this)">🛒 Orders</button>
+  <button onclick="showSection('homepage',this)">🏠 Homepage</button>
+  <button onclick="showSection('store',this)">⚙️ Store Settings</button>
+  <button onclick="showSection('pages',this)">📄 Pages</button>
+  <button onclick="showSection('social',this)">📱 Social Links</button>
+ </div>
 
-    <div class="menu">
-        <button class="active" onclick="showPage('dashboard',this)">
-            📊 Dashboard
-        </button>
-        <button onclick="showPage('products',this)">
-            ⌚ Products
-        </button>
-        <button onclick="showPage('orders',this)">
-            📦 Orders
-        </button>
-        <button onclick="showPage('homepage',this)">
-            🏠 Homepage
-        </button>
-        <button onclick="showPage('settings',this)">
-            ⚙️ Store Settings
-        </button>
-        <button onclick="showPage('pages',this)">
-            📄 Pages
-        </button>
-        <button onclick="showPage('social',this)">
-            🔗 Social Media
-        </button>
-        <button class="logout" onclick="logout()">
-            🚪 Logout
-        </button>
-    </div>
+ <button class="btn btn-danger logout" onclick="logout()">Logout</button>
 </aside>
 
 <main class="main">
 
 <div class="top">
-    <div>
-        <button class="mobileMenu" onclick="toggleSidebar()">☰</button>
-        <h1 id="pageTitle" style="display:inline-block;margin-left:10px">
-            Dashboard
-        </h1>
-    </div>
-    <button class="btn dark" onclick="window.open('index.html','_blank')">
-        View Store
-    </button>
+ <button class="btn btn-dark mobile-menu" onclick="toggleSidebar()">☰</button>
+ <h1 id="pageTitle">Dashboard</h1>
+ <button class="btn btn-red" onclick="loadEverything()">↻ Refresh</button>
 </div>
 
+<!-- ================= DASHBOARD ================= -->
+<section id="dashboard" class="section active">
+ <div class="cards">
+  <div class="card">
+   <small>Total Products</small>
+   <h2 id="totalProducts">0</h2>
+  </div>
+  <div class="card">
+   <small>Total Orders</small>
+   <h2 id="totalOrders">0</h2>
+  </div>
+  <div class="card">
+   <small>Pending Orders</small>
+   <h2 id="pendingOrders">0</h2>
+  </div>
+  <div class="card">
+   <small>Total Sales</small>
+   <h2 id="totalSales">PKR 0</h2>
+  </div>
+ </div>
 
-<!-- DASHBOARD -->
-<section id="dashboard" class="page">
-
-<div class="stats">
-    <div class="stat">
-        <small>Total Products</small>
-        <h2 id="statProducts">0</h2>
-    </div>
-    <div class="stat">
-        <small>Total Orders</small>
-        <h2 id="statOrders">0</h2>
-    </div>
-    <div class="stat">
-        <small>Store Status</small>
-        <h2>Online</h2>
-    </div>
-    <div class="stat">
-        <small>WhatsApp</small>
-        <h2 style="font-size:16px" id="statWhatsapp">
-            03440681490
-        </h2>
-    </div>
-</div>
-
-<div class="panel">
-    <div class="panelHead">
-        <h2>Quick Actions</h2>
-    </div>
-    <div class="actions">
-        <button class="btn" onclick="openProductModal()">
-            + Add Product
-        </button>
-        <button class="btn dark" onclick="showPageByName('settings')">
-            Store Settings
-        </button>
-        <button class="btn gray" onclick="showPageByName('homepage')">
-            Edit Homepage
-        </button>
-    </div>
-</div>
-
-<div class="panel">
-    <div class="panelHead">
-        <h2>Recent Products</h2>
-    </div>
-    <div id="recentProducts"></div>
-</div>
-
+ <div class="panel">
+  <h2>PS MART Admin</h2>
+  <p>Welcome to your online watch store management system.</p>
+  <p>Products, orders, homepage and store settings are managed from this panel.</p>
+ </div>
 </section>
 
+<!-- ================= PRODUCTS ================= -->
+<section id="products" class="section">
+ <div class="panel">
+  <h2 id="productFormTitle">Add Product</h2>
+  <input type="hidden" id="productId">
 
-<!-- PRODUCTS -->
-<section id="products" class="page hidden">
+  <div class="grid">
+   <div class="field">
+    <label>Product Name</label>
+    <input id="pName" placeholder="Classic Black Watch">
+   </div>
 
-<div class="panel">
-    <div class="panelHead">
-        <h2>Products</h2>
-        <button class="btn" onclick="openProductModal()">
-            + Add Product
-        </button>
-    </div>
+   <div class="field">
+    <label>Category</label>
+    <select id="pCategory">
+     <option>Men</option>
+     <option>Women</option>
+     <option>Couple</option>
+     <option>Luxury</option>
+     <option>Sale</option>
+    </select>
+   </div>
 
-    <div style="overflow-x:auto">
-    <table class="productTable">
-        <thead>
-        <tr>
-            <th>Photo</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="productTable"></tbody>
-    </table>
-    </div>
-</div>
+   <div class="field">
+    <label>Price</label>
+    <input id="pPrice" type="number" placeholder="3499">
+   </div>
 
+   <div class="field">
+    <label>Old Price</label>
+    <input id="pOldPrice" type="number" placeholder="4499">
+   </div>
+
+   <div class="field">
+    <label>Stock</label>
+    <input id="pStock" type="number" placeholder="10">
+   </div>
+
+   <div class="field">
+    <label>SKU</label>
+    <input id="pSku" placeholder="PS-WATCH-001">
+   </div>
+
+   <div class="field">
+    <label>Image URL</label>
+    <input id="pImage" placeholder="https://...">
+   </div>
+  </div>
+
+  <div class="field">
+   <label>Description</label>
+   <textarea id="pDescription"></textarea>
+  </div>
+
+  <div class="check">
+   <input id="pFeatured" type="checkbox">
+   <label>Featured Product</label>
+  </div>
+
+  <div class="check">
+   <input id="pSale" type="checkbox">
+   <label>Sale Product</label>
+  </div>
+
+  <div class="actions">
+   <button class="btn btn-red" onclick="saveProduct()">Save Product</button>
+   <button class="btn btn-light" onclick="clearProductForm()">Clear</button>
+  </div>
+ </div>
+
+ <div class="panel">
+  <h2>All Products</h2>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Image</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Actions</th>
+     </tr>
+    </thead>
+    <tbody id="productsTable"></tbody>
+   </table>
+  </div>
+ </div>
 </section>
 
-
-<!-- ORDERS -->
-<section id="orders" class="page hidden">
-
-<div class="panel">
-    <div class="panelHead">
-        <h2>Customer Orders</h2>
-    </div>
-
-    <div id="ordersList">
-        <div class="empty">
-            No orders available yet.
-        </div>
-    </div>
-</div>
-
+<!-- ================= ORDERS ================= -->
+<section id="orders" class="section">
+ <div class="panel">
+  <h2>Orders</h2>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Customer</th>
+      <th>Phone</th>
+      <th>Total</th>
+      <th>Payment</th>
+      <th>Status</th>
+      <th>Date</th>
+      <th>Action</th>
+     </tr>
+    </thead>
+    <tbody id="ordersTable"></tbody>
+   </table>
+  </div>
+ </div>
 </section>
 
+<!-- ================= HOMEPAGE ================= -->
+<section id="homepage" class="section">
+ <div class="panel">
+  <h2>Homepage Settings</h2>
+  <div class="grid">
+   <div class="field"><label>Top Bar Text</label><input id="topbarText"></div>
+   <div class="field"><label>Hero Small Text</label><input id="heroSmall"></div>
+   <div class="field"><label>Hero Title</label><input id="heroTitle"></div>
+   <div class="field"><label>Hero Button</label><input id="heroButton"></div>
+   <div class="field"><label>Hero Image URL</label><input id="heroImage"></div>
+  </div>
+  <div class="field"><label>Hero Description</label><textarea id="heroDescription"></textarea></div>
 
-<!-- HOMEPAGE -->
-<section id="homepage" class="page hidden">
+  <div class="grid">
+   <div class="field"><label>Featured Title</label><input id="featuredTitle"></div>
+   <div class="field"><label>Sale Title</label><input id="saleTitle"></div>
+  </div>
+  <div class="field"><label>Sale Description</label><textarea id="saleDescription"></textarea></div>
 
-<div class="panel">
-<div class="panelHead">
-    <h2>Homepage Settings</h2>
-</div>
+  <div class="check"><input id="showCategories" type="checkbox"><label>Show Categories</label></div>
+  <div class="check"><input id="showFeatured" type="checkbox"><label>Show Featured Products</label></div>
+  <div class="check"><input id="showSale" type="checkbox"><label>Show Sale Section</label></div>
+  <div class="check"><input id="showNewsletter" type="checkbox"><label>Show Newsletter</label></div>
 
-<div class="grid">
-
-<div class="field">
-<label>Top Bar Text</label>
-<input id="topbarText">
-</div>
-
-<div class="field">
-<label>Hero Small Text</label>
-<input id="heroSmall">
-</div>
-
-<div class="field full">
-<label>Hero Heading</label>
-<input id="heroTitle">
-</div>
-
-<div class="field full">
-<label>Hero Description</label>
-<textarea id="heroDescription" rows="4"></textarea>
-</div>
-
-<div class="field full">
-<label>Hero Background Image URL</label>
-<input id="heroImage">
-</div>
-
-<div class="field">
-<label>Hero Button Text</label>
-<input id="heroButton">
-</div>
-
-<div class="field">
-<label>Featured Section Title</label>
-<input id="featuredTitle">
-</div>
-
-<div class="field">
-<label>Sale Section Title</label>
-<input id="saleTitle">
-</div>
-
-<div class="field full">
-<label>Sale Section Description</label>
-<textarea id="saleDescription" rows="3"></textarea>
-</div>
-
-</div>
-
-<button class="btn" onclick="saveHomepage()">
-SAVE HOMEPAGE
-</button>
-
-</div>
-
-<div class="panel">
-<div class="panelHead"><h2>Homepage Sections</h2></div>
-
-<label class="switch">
-<input type="checkbox" id="showCategories">
-Show Categories
-</label><br>
-
-<label class="switch">
-<input type="checkbox" id="showFeatured">
-Show Featured Products
-</label><br>
-
-<label class="switch">
-<input type="checkbox" id="showSale">
-Show Sale Section
-</label><br>
-
-<label class="switch">
-<input type="checkbox" id="showNewsletter">
-Show Newsletter
-</label>
-
-</div>
-
+  <button class="btn btn-red" onclick="saveHomepage()">Save Homepage</button>
+ </div>
 </section>
 
+<!-- ================= STORE ================= -->
+<section id="store" class="section">
+ <div class="panel">
+  <h2>Store Settings</h2>
+  <div class="grid">
+   <div class="field"><label>Store Name</label><input id="storeName"></div>
+   <div class="field"><label>Logo Text</label><input id="logoText"></div>
+   <div class="field"><label>Support Number</label><input id="supportNumber"></div>
+   <div class="field"><label>WhatsApp Number</label><input id="whatsappNumber"></div>
+   <div class="field"><label>Email</label><input id="storeEmail"></div>
+   <div class="field"><label>Currency</label><input id="currency"></div>
+   <div class="field"><label>Delivery Charges</label><input id="deliveryCharges" type="number"></div>
+   <div class="field"><label>Country</label><input id="country"></div>
+  </div>
+  <div class="field"><label>Store Address</label><textarea id="storeAddress"></textarea></div>
+  <div class="field"><label>WhatsApp Default Message</label><textarea id="whatsappMessage"></textarea></div>
+  
+  <div class="check"><input id="whatsappEnabled" type="checkbox"><label>Enable WhatsApp Button</label></div>
 
-<!-- SETTINGS -->
-<section id="settings" class="page hidden">
-
-<div class="panel">
-<div class="panelHead">
-<h2>Store Information</h2>
-</div>
-
-<div class="grid">
-
-<div class="field">
-<label>Store Name</label>
-<input id="storeName">
-</div>
-
-<div class="field">
-<label>Logo Text</label>
-<input id="logoText">
-</div>
-
-<div class="field">
-<label>Customer Support Number</label>
-<input id="supportNumber">
-</div>
-
-<div class="field">
-<label>WhatsApp Number</label>
-<input id="whatsappNumber">
-</div>
-
-<div class="field">
-<label>Email</label>
-<input id="storeEmail">
-</div>
-
-<div class="field">
-<label>Currency</label>
-<input id="currency">
-</div>
-
-<div class="field">
-<label>Delivery Charges</label>
-<input id="deliveryCharges" type="number">
-</div>
-
-<div class="field">
-<label>Country</label>
-<input id="country">
-</div>
-
-<div class="field full">
-<label>Store Address</label>
-<textarea id="storeAddress" rows="3"></textarea>
-</div>
-
-<div class="field full">
-<label>Default WhatsApp Message</label>
-<textarea id="whatsappMessage" rows="4"></textarea>
-</div>
-
-</div>
-
-<button class="btn" onclick="saveSettings()">
-SAVE STORE SETTINGS
-</button>
-
-</div>
-
-<div class="panel">
-<div class="panelHead"><h2>WhatsApp Button</h2></div>
-
-<label class="switch">
-<input type="checkbox" id="whatsappEnabled">
-Enable Floating WhatsApp Button
-</label>
-</div>
-
+  <button class="btn btn-red" onclick="saveStore()">Save Store Settings</button>
+ </div>
 </section>
 
+<!-- ================= PAGES ================= -->
+<section id="pages" class="section">
+ <div class="panel">
+  <h2>Website Pages</h2>
+  <div class="field"><label>About Us</label><textarea id="aboutText"></textarea></div>
+  <div class="field"><label>Shipping Policy</label><textarea id="shippingText"></textarea></div>
+  <div class="field"><label>Return Policy</label><textarea id="returnText"></textarea></div>
+  <div class="field"><label>Privacy Policy</label><textarea id="privacyText"></textarea></div>
+  <div class="field"><label>Terms & Conditions</label><textarea id="termsText"></textarea></div>
 
-<!-- PAGES -->
-<section id="pages" class="page hidden">
-
-<div class="panel">
-<div class="panelHead">
-<h2>Website Pages</h2>
-</div>
-
-<div class="field">
-<label>About Us</label>
-<textarea id="aboutText" rows="6"></textarea>
-</div>
-
-<div class="field">
-<label>Shipping Policy</label>
-<textarea id="shippingText" rows="6"></textarea>
-</div>
-
-<div class="field">
-<label>Return Policy</label>
-<textarea id="returnText" rows="6"></textarea>
-</div>
-
-<div class="field">
-<label>Privacy Policy</label>
-<textarea id="privacyText" rows="6"></textarea>
-</div>
-
-<div class="field">
-<label>Terms & Conditions</label>
-<textarea id="termsText" rows="6"></textarea>
-</div>
-
-<button class="btn" onclick="savePages()">
-SAVE PAGES
-</button>
-</div>
-
+  <button class="btn btn-red" onclick="savePages()">Save Pages</button>
+ </div>
 </section>
 
-
-<!-- SOCIAL -->
-<section id="social" class="page hidden">
-
-<div class="panel">
-<div class="panelHead">
-<h2>Social Media Links</h2>
-</div>
-
-<div class="grid">
-
-<div class="field">
-<label>Facebook</label>
-<input id="facebook">
-</div>
-
-<div class="field">
-<label>Instagram</label>
-<input id="instagram">
-</div>
-
-<div class="field">
-<label>TikTok</label>
-<input id="tiktok">
-</div>
-
-<div class="field">
-<label>YouTube</label>
-<input id="youtube">
-</div>
-
-</div>
-
-<button class="btn" onclick="saveSocial()">
-SAVE SOCIAL LINKS
-</button>
-</div>
-
+<!-- ================= SOCIAL ================= -->
+<section id="social" class="section">
+ <div class="panel">
+  <h2>Social Media Links</h2>
+  <div class="grid">
+   <div class="field"><label>Facebook</label><input id="facebook" placeholder="https://facebook.com/..."></div>
+   <div class="field"><label>Instagram</label><input id="instagram" placeholder="https://instagram.com/..."></div>
+   <div class="field"><label>TikTok</label><input id="tiktok" placeholder="https://tiktok.com/@..."></div>
+   <div class="field"><label>YouTube</label><input id="youtube" placeholder="https://youtube.com/..."></div>
+  </div>
+  <button class="btn btn-red" onclick="saveSocial()">Save Social Links</button>
+ </div>
 </section>
 
 </main>
 </div>
 
-
-<!-- PRODUCT MODAL -->
-<div class="modal" id="productModal">
-
-<div class="modalBox">
-
-<div class="modalHead">
-<h2 id="modalTitle">Add Product</h2>
-<button class="close" onclick="closeProductModal()">×</button>
-</div>
-
-<input type="hidden" id="editId">
-
-<div class="grid">
-
-<div class="field">
-<label>Product Name</label>
-<input id="pName" placeholder="Classic Black Watch">
-</div>
-
-<div class="field">
-<label>Category</label>
-<select id="pCategory">
-<option>Men</option>
-<option>Women</option>
-<option>Couple</option>
-</select>
-</div>
-
-<div class="field">
-<label>Price</label>
-<input id="pPrice" type="number">
-</div>
-
-<div class="field">
-<label>Old Price</label>
-<input id="pOldPrice" type="number">
-</div>
-
-<div class="field">
-<label>Stock</label>
-<input id="pStock" type="number" value="10">
-</div>
-
-<div class="field">
-<label>SKU</label>
-<input id="pSku">
-</div>
-
-<div class="field full">
-<label>Product Image URL</label>
-<input id="pImage"
-       placeholder="https://example.com/watch.jpg"
-       oninput="previewImage()">
-<img id="imagePreview" class="preview" alt="">
-</div>
-
-<div class="field full">
-<label>Description</label>
-<textarea id="pDescription" rows="4"></textarea>
-</div>
-
-<div class="field">
-<label class="switch">
-<input type="checkbox" id="pFeatured">
-Featured Product
-</label>
-</div>
-
-<div class="field">
-<label class="switch">
-<input type="checkbox" id="pSale" checked>
-Sale Product
-</label>
-</div>
-
-</div>
-
-<div style="display:flex;gap:10px;justify-content:flex-end">
-<button class="btn gray" onclick="closeProductModal()">
-Cancel
-</button>
-<button class="btn" onclick="saveProduct()">
-SAVE PRODUCT
-</button>
-</div>
-
-</div>
-</div>
-
-
 <script>
+/* =====================================================
+   SUPABASE CONFIG
+   Replace with your actual keys from Supabase Dashboard
+   ===================================================== */
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
 
-/* =========================
-   ADMIN LOGIN
-========================= */
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const ADMIN_EMAIL="goasegujjar35@gmail.com";
-
-/*
-  Password is checked locally in this demo.
-  For a real online store use Firebase/Supabase authentication.
-*/
-const ADMIN_PASSWORD="Goase.7th";
-
-function login(){
-
-    const email=document.getElementById("loginEmail").value.trim();
-    const password=document.getElementById("loginPassword").value;
-
-    if(email===ADMIN_EMAIL && password===ADMIN_PASSWORD){
-
-        sessionStorage.setItem("psAdminLogged","yes");
-
-        document.getElementById("loginPage").classList.add("hidden");
-        document.getElementById("adminApp").classList.remove("hidden");
-
-        loadAll();
-
-    }else{
-        document.getElementById("loginError").style.display="block";
-    }
+/* =====================================================
+   UTILITY FUNCTIONS
+   ===================================================== */
+function escapeHtml(unsafe) {
+  if(!unsafe) return "";
+  return unsafe.toString()
+       .replace(/&/g, "&amp;")
+       .replace(/</g, "&lt;")
+       .replace(/>/g, "&gt;")
+       .replace(/"/g, "&quot;")
+       .replace(/'/g, "&#039;");
+}
+function escapeAttr(unsafe) {
+  return escapeHtml(unsafe);
 }
 
-function logout(){
-    sessionStorage.removeItem("psAdminLogged");
-    location.reload();
+/* =====================================================
+   LOGIN / AUTHENTICATION
+   ===================================================== */
+const loginPage = document.getElementById("loginPage");
+const app = document.getElementById("app");
+
+document.getElementById("loginForm").addEventListener("submit", async e => {
+ e.preventDefault();
+ const email = document.getElementById("loginEmail").value.trim();
+ const password = document.getElementById("loginPassword").value;
+ const error = document.getElementById("loginError");
+
+ error.textContent = "Logging in...";
+
+ const {data, error:loginError} = await db.auth.signInWithPassword({
+   email, password
+ });
+
+ if(loginError){
+   error.textContent = loginError.message;
+   return;
+ }
+ if(data.user){
+   error.textContent = "";
+   showApp();
+ }
+});
+
+async function checkLogin(){
+ const {data} = await db.auth.getSession();
+ if(data.session){
+   showApp();
+ }else{
+   showLogin();
+ }
 }
 
-if(sessionStorage.getItem("psAdminLogged")==="yes"){
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("adminApp").classList.remove("hidden");
+function showLogin(){
+ loginPage.style.display="flex";
+ app.style.display="none";
 }
 
-
-/* =========================
-   DEFAULT DATA
-========================= */
-
-const defaultProducts=[
-{
-id:1,
-name:"Classic Black Watch",
-category:"Men",
-price:3499,
-oldPrice:4499,
-stock:20,
-sku:"PS-001",
-image:"https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=80",
-description:"Premium classic black watch.",
-featured:true,
-sale:true
-},
-{
-id:2,
-name:"Luxury Silver Watch",
-category:"Men",
-price:3999,
-oldPrice:4999,
-stock:15,
-sku:"PS-002",
-image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80",
-description:"Elegant silver watch.",
-featured:true,
-sale:true
-},
-{
-id:3,
-name:"Elegant Women's Watch",
-category:"Women",
-price:2999,
-oldPrice:3999,
-stock:18,
-sku:"PS-003",
-image:"https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=700&q=80",
-description:"Elegant watch for women.",
-featured:true,
-sale:true
-},
-{
-id:4,
-name:"Premium Couple Set",
-category:"Couple",
-price:5999,
-oldPrice:7499,
-stock:10,
-sku:"PS-004",
-image:"https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=700&q=80",
-description:"Premium matching couple watch set.",
-featured:true,
-sale:true
-}
-];
-
-const defaultSettings={
-storeName:"PS MART",
-logoText:"PS MART",
-supportNumber:"03440681490",
-whatsappNumber:"03440681490",
-storeEmail:"",
-currency:"Rs.",
-deliveryCharges:0,
-country:"Pakistan",
-storeAddress:"",
-whatsappMessage:"Assalam-o-Alaikum, PS MART se watch ke bare mein maloomat chahiye.",
-whatsappEnabled:true
-};
-
-const defaultHomepage={
-topbarText:"Free Delivery on Selected Orders | Premium Watches in Pakistan",
-heroSmall:"PS MART COLLECTION",
-heroTitle:"TIME MADE PREMIUM.",
-heroDescription:"Discover stylish and premium watches designed for your everyday look.",
-heroImage:"",
-heroButton:"SHOP COLLECTION",
-featuredTitle:"Featured Watches",
-saleTitle:"Special Watch Sale",
-saleDescription:"Upgrade your style with selected watches at special prices.",
-showCategories:true,
-showFeatured:true,
-showSale:true,
-showNewsletter:true
-};
-
-const defaultPages={
-aboutText:"Welcome to PS MART. We offer stylish watches for men, women and couples.",
-shippingText:"We deliver watches across Pakistan. Delivery time depends on location.",
-returnText:"Please contact customer support for return and exchange information.",
-privacyText:"Your information is used only for order processing and customer support.",
-termsText:"By using this store you agree to our terms and conditions."
-};
-
-const defaultSocial={
-facebook:"",
-instagram:"",
-tiktok:"",
-youtube:""
-};
-
-
-/* =========================
-   STORAGE
-========================= */
-
-function getProducts(){
-    const x=localStorage.getItem("psProducts");
-    if(!x){
-        localStorage.setItem("psProducts",JSON.stringify(defaultProducts));
-        return defaultProducts;
-    }
-    return JSON.parse(x);
+function showApp(){
+ loginPage.style.display="none";
+ app.style.display="block";
+ loadEverything();
 }
 
-function saveProducts(data){
-    localStorage.setItem("psProducts",JSON.stringify(data));
+async function logout(){
+ await db.auth.signOut();
+ showLogin();
 }
 
-function getObject(key,def){
-    const x=localStorage.getItem(key);
-    if(!x){
-        localStorage.setItem(key,JSON.stringify(def));
-        return {...def};
-    }
-    return JSON.parse(x);
-}
-
-
-/* =========================
+/* =====================================================
    NAVIGATION
-=========
+   ===================================================== */
+const titles = {
+ dashboard:"Dashboard", products:"Products", orders:"Orders",
+ homepage:"Homepage Settings", store:"Store Settings",
+ pages:"Website Pages", social:"Social Links"
+};
+
+function showSection(id,btn){
+ document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+ if(btn) btn.classList.add("active");
+ document.getElementById("pageTitle").textContent = titles[id] || "Admin Panel";
+ document.getElementById("sidebar").classList.remove("open");
+}
+
+function toggleSidebar(){
+ document.getElementById("sidebar").classList.toggle("open");
+}
+
+/* =====================================================
+   LOAD EVERYTHING
+   ===================================================== */
+async function loadEverything(){
+ await Promise.all([
+   loadProducts(),
+   loadOrders(),
+   loadStore(),
+   loadHomepage(),
+   loadPages(),
+   loadSocial()
+ ]);
+ updateDashboard();
+}
+
+async function updateDashboard(){
+  try {
+    // Product count
+    const {count: pCount} = await db.from("products").select('*', {count: 'exact', head: true});
+    document.getElementById("totalProducts").textContent = pCount || 0;
+
+    // Orders Stats (Will fail gracefully if orders table doesn't exist yet)
+    const {data: orders, error: oError} = await db.from("orders").select('*');
+    if(!oError && orders) {
+      document.getElementById("totalOrders").textContent = orders.length;
+      document.getElementById("pendingOrders").textContent = orders.filter(o => o.status === 'Pending').length;
+      const sales = orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+      document.getElementById("totalSales").textContent = "PKR " + sales.toLocaleString();
+    }
+  } catch(e) {
+    console.log("Dashboard stats error (likely missing tables): ", e);
+  }
+}
+
+/* =====================================================
+   PRODUCTS
+   ===================================================== */
+async function loadProducts(){
+ const {data,error} = await db.from("products").select("*").order("created_at",{ascending:false});
+ const table = document.getElementById("productsTable");
+ table.innerHTML = "";
+
+ if(error || !data || !data.length){
+   table.innerHTML = `<tr><td colspan="6">No products found.</td></tr>`;
+   return;
+ }
+
+ data.forEach(p=>{
+  table.innerHTML += `
+   <tr>
+    <td>${p.image_url ? `<img class="product-img" src="${escapeAttr(p.image_url)}">` : "—"}</td>
+    <td>${escapeHtml(p.name || "")}</td>
+    <td>${escapeHtml(p.category || "")}</td>
+    <td>PKR ${Number(p.price||0).toLocaleString()}</td>
+    <td>${p.stock ?? 0}</td>
+    <td>
+     <button class="btn btn-dark" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
+     <button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
+    </td>
+   </tr>
+  `;
+ });
+}
+
+async function saveProduct(){
+ const id = document.getElementById("productId").value;
+ const product = {
+  name: document.getElementById("pName").value.trim(),
+  category: document.getElementById("pCategory").value,
+  price: Number(document.getElementById("pPrice").value || 0),
+  old_price: Number(document.getElementById("pOldPrice").value || 0) || null,
+  stock: Number(document.getElementById("pStock").value || 0),
+  sku: document.getElementById("pSku").value.trim() || null,
+  image_url: document.getElementById("pImage").value.trim() || null,
+  description: document.getElementById("pDescription").value.trim(),
+  featured: document.getElementById("pFeatured").checked,
+  sale: document.getElementById("pSale").checked,
+  updated_at: new Date().toISOString()
+ };
+
+ if(!product.name){ alert("Product name required."); return; }
+
+ let result;
+ if(id){
+  result = await db.from("products").update(product).eq("id",id);
+ }else{
+  result = await db.from("products").insert(product);
+ }
+
+ if(result.error){
+  alert(result.error.message); return;
+ }
+ alert(id ? "Product updated." : "Product added.");
+ clearProductForm();
+ loadProducts();
+ updateDashboard();
+}
+
+function editProduct(p){
+ document.getElementById("productId").value=p.id;
+ document.getElementById("pName").value=p.name || "";
+ document.getElementById("pCategory").value=p.category || "Men";
+ document.getElementById("pPrice").value=p.price || "";
+ document.getElementById("pOldPrice").value=p.old_price || "";
+ document.getElementById("pStock").value=p.stock || "";
+ document.getElementById("pSku").value=p.sku || "";
+ document.getElementById("pImage").value=p.image_url || "";
+ document.getElementById("pDescription").value=p.description || "";
+ document.getElementById("pFeatured").checked=!!p.featured;
+ document.getElementById("pSale").checked=!!p.sale;
+ document.getElementById("productFormTitle").textContent = "Edit Product";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function deleteProduct(id){
+ if(!confirm("Delete this product?")) return;
+ const {error} = await db.from("products").delete().eq("id",id);
+ if(error){ alert(error.message); return; }
+ loadProducts();
+ updateDashboard();
+}
+
+// ----> This is where your code was cut off, it is now completed!
+function clearProductForm(){
+ document.getElementById("productId").value="";
+ document.getElementById("pName").value="";
+ document.getElementById("pCategory").value="Men";
+ document.getElementById("pPrice").value="";
+ document.getElementById("pOldPrice").value="";
+ document.getElementById("pStock").value="";
+ document.getElementById("pSku").value="";
+ document.getElementById("pImage").value="";
+ document.getElementById("pDescription").value="";
+ document.getElementById("pFeatured").checked=false;
+ document.getElementById("pSale").checked=false;
+ document.getElementById("productFormTitle").textContent="Add Product";
+}
+
+/* =====================================================
+   ORDERS (Requires an "orders" table in Supabase)
+   ===================================================== */
+async function loadOrders(){
+ try {
+   const {data, error} = await db.from("orders").select("*").order("created_at",{ascending:false});
+   const table = document.getElementById("ordersTable");
+   
+   if(error || !data || !data.length){
+     table.innerHTML = `<tr><td colspan="7">No orders found.</td></tr>`;
+     return;
+   }
+   
+   table.innerHTML = data.map(o => `
+    <tr>
+     <td>${escapeHtml(o.customer_name)}</td>
+     <td>${escapeHtml(o.phone)}</td>
+     <td>PKR ${o.total}</td>
+     <td>${escapeHtml(o.payment_method)}</td>
+     <td><span class="status">${escapeHtml(o.status)}</span></td>
+     <td>${new Date(o.created_at).toLocaleDateString()}</td>
+     <td><button class="btn btn-dark btn-sm">View</button></td>
+    </tr>
+   `).join("");
+ } catch(e) {
+   document.getElementById("ordersTable").innerHTML = `<tr><td colspan="7">Order table not configured.</td></tr>`;
+ }
+}
+
+
+/* =====================================================
+   SETTINGS (HOMEPAGE, STORE, PAGES, SOCIAL)
+   Saving to LocalStorage so they work immediately without 
+   requiring you to create extra tables in Supabase. 
+   ===================================================== */
+
+// 1. Homepage
+function loadHomepage() {
+ const data = JSON.parse(localStorage.getItem("ps_homepage")) || {};
+ ['topbarText','heroSmall','heroTitle','heroButton','heroImage','heroDescription',
+  'featuredTitle','saleTitle','saleDescription'].forEach(id => {
+    if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
+ });
+ ['showCategories','showFeatured','showSale','showNewsletter'].forEach(id => {
+    if(document.getElementById(id)) document.getElementById(id).checked = data[id] ?? true;
+ });
+}
+function saveHomepage() {
+ const data = {};
+ ['topbarText','heroSmall','heroTitle','heroButton','heroImage','heroDescription',
+  'featuredTitle','saleTitle','saleDescription'].forEach(id => data[id] = document.getElementById(id).value);
+ ['showCategories','showFeatured','showSale','showNewsletter'].forEach(id => data[id] = document.getElementById(id).checked);
+ localStorage.setItem("ps_homepage", JSON.stringify(data));
+ alert("Homepage settings saved!");
+}
+
+// 2. Store
+function loadStore() {
+ const data = JSON.parse(localStorage.getItem("ps_store")) || {};
+ ['storeName','logoText','supportNumber','whatsappNumber','storeEmail',
+  'currency','deliveryCharges','country','storeAddress','whatsappMessage'].forEach(id => {
+    if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
+ });
+ if(document.getElementById("whatsappEnabled")) {
+   document.getElementById("whatsappEnabled").checked = data.whatsappEnabled ?? true;
+ }
+}
+function saveStore() {
+ const data = {};
+ ['storeName','logoText','supportNumber','whatsappNumber','storeEmail',
+  'currency','deliveryCharges','country','storeAddress','whatsappMessage'].forEach(id => {
+    data[id] = document.getElementById(id).value;
+ });
+ data.whatsappEnabled = document.getElementById("whatsappEnabled").checked;
+ localStorage.setItem("ps_store", JSON.stringify(data));
+ alert("Store settings saved!");
+}
+
+// 3. Pages
+function loadPages() {
+ const data = JSON.parse(localStorage.getItem("ps_pages")) || {};
+ ['aboutText','shippingText','returnText','privacyText','termsText'].forEach(id => {
+   if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
+ });
+}
+function savePages() {
+ const data = {};
+ ['aboutText','shippingText','returnText','privacyText','termsText'].forEach(id => {
+   data[id] = document.getElementById(id).value;
+ });
+ localStorage.setItem("ps_pages", JSON.stringify(data));
+ alert("Pages saved!");
+}
+
+// 4. Social
+function loadSocial() {
+ const data = JSON.parse(localStorage.getItem("ps_social")) || {};
+ ['facebook','instagram','tiktok','youtube'].forEach(id => {
+   if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
+ });
+}
+function saveSocial() {
+ const data = {};
+ ['facebook','instagram','tiktok','youtube'].forEach(id => {
+   data[id] = document.getElementById(id).value;
+ });
+ localStorage.setItem("ps_social", JSON.stringify(data));
+ alert("Social links saved!");
+}
+
+/* =====================================================
+   INITIALIZE
+   ===================================================== */
+checkLogin();
+
+</script>
+</body>
+</html>
