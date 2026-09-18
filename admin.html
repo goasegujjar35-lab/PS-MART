@@ -5,254 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>PS MART — Admin Panel</title>
 
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- External CSS -->
+<link rel="stylesheet" href="style.css">
 
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,Helvetica,sans-serif;
- background:#f5f5f5;
- color:#222;
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-:root{
- --red:#d71920;
- --dark:#151515;
- --light:#fff;
- --border:#e5e5e5;
-}
-
-.login{
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- background:linear-gradient(135deg,#111,#d71920);
- padding:20px;
-}
-.login-box{
- width:100%;
- max-width:420px;
- background:white;
- padding:35px;
- border-radius:18px;
- box-shadow:0 20px 60px #0005;
-}
-.logo{
- font-size:32px;
- font-weight:900;
- text-align:center;
- margin-bottom:8px;
-}
-.logo span{color:var(--red)}
-.login-box p{text-align:center;color:#777}
-.field{margin:15px 0}
-.field label{
- display:block;
- font-weight:bold;
- margin-bottom:7px;
-}
-input,select,textarea{
- width:100%;
- border:1px solid #ddd;
- border-radius:9px;
- padding:12px;
- outline:none;
- background:#fff;
-}
-input:focus,select:focus,textarea:focus{
- border-color:var(--red);
-}
-textarea{min-height:120px;resize:vertical}
-
-.btn{
- border:0;
- border-radius:9px;
- padding:11px 16px;
- font-weight:bold;
-}
-.btn-red{background:var(--red);color:white}
-.btn-dark{background:#181818;color:white}
-.btn-light{background:#eee;color:#222}
-.btn-danger{background:#b00020;color:white}
-.btn-green{background:#198754;color:white}
-
-.login-btn{
- width:100%;
- padding:14px;
- margin-top:8px;
-}
-
-.error{
- color:#d71920;
- text-align:center;
- margin-top:12px;
- font-weight:bold;
-}
-
-.app{display:none;min-height:100vh}
-
-.sidebar{
- position:fixed;
- left:0;
- top:0;
- bottom:0;
- width:250px;
- background:#151515;
- color:white;
- padding:20px 15px;
- overflow:auto;
- z-index:100;
-}
-.side-logo{
- font-size:27px;
- font-weight:900;
- padding:10px 12px 25px;
-}
-.side-logo span{color:#e51b23}
-
-.nav button{
- display:block;
- width:100%;
- background:transparent;
- color:#ddd;
- border:0;
- padding:13px 14px;
- text-align:left;
- border-radius:8px;
- margin:3px 0;
- font-weight:bold;
-}
-.nav button:hover,.nav button.active{
- background:var(--red);
- color:white;
-}
-
-.logout{
- margin-top:25px;
- width:100%;
-}
-
-.main{
- margin-left:250px;
- padding:25px;
-}
-
-.top{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:15px;
- margin-bottom:25px;
-}
-.top h1{margin:0}
-.mobile-menu{display:none}
-
-.section{display:none}
-.section.active{display:block}
-
-.cards{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:15px;
- margin-bottom:25px;
-}
-.card{
- background:white;
- border-radius:13px;
- padding:20px;
- border:1px solid var(--border);
-}
-.card small{color:#777}
-.card h2{margin:8px 0 0}
-
-.panel{
- background:white;
- border:1px solid var(--border);
- border-radius:13px;
- padding:22px;
- margin-bottom:20px;
-}
-.panel h2{margin-top:0}
-
-.grid{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:16px;
-}
-.grid-3{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:16px;
-}
-
-.actions{
- display:flex;
- gap:8px;
- flex-wrap:wrap;
- margin-top:15px;
-}
-
-.table-wrap{overflow:auto}
-table{
- width:100%;
- border-collapse:collapse;
- min-width:700px;
-}
-th,td{
- padding:12px;
- border-bottom:1px solid #eee;
- text-align:left;
-}
-th{background:#fafafa}
-
-.product-img{
- width:55px;
- height:55px;
- object-fit:cover;
- border-radius:8px;
-}
-
-.status{
- padding:5px 9px;
- border-radius:20px;
- background:#eee;
- font-size:12px;
- font-weight:bold;
-}
-
-.check{
- display:flex;
- align-items:center;
- gap:10px;
- margin:12px 0;
-}
-.check input{width:auto;height:18px;width:18px;cursor:pointer}
-
-@media(max-width:900px){
- .sidebar{width:220px;}
- .main{margin-left:220px}
- .cards{grid-template-columns:repeat(2,1fr)}
- .grid-3{grid-template-columns:1fr 1fr}
-}
-
-@media(max-width:700px){
- .sidebar{
-  transform:translateX(-100%);
-  transition:.25s;
-  z-index:100;
- }
- .sidebar.open{transform:translateX(0)}
- .main{margin-left:0;padding:15px}
- .mobile-menu{display:block}
- .cards,.grid,.grid-3{grid-template-columns:1fr}
- .top h1{font-size:22px}
-}
-</style>
+<!-- External JS (Type module for Firebase) -->
+<script type="module" src="script.js" defer></script>
 </head>
 
 <body>
@@ -265,12 +25,12 @@ th{background:#fafafa}
 
   <form id="loginForm">
    <div class="field">
-    <label>Email</label>
+    <label><i class="fa-solid fa-envelope"></i> Email</label>
     <input id="loginEmail" type="email" placeholder="Admin email" required>
    </div>
 
    <div class="field">
-    <label>Password</label>
+    <label><i class="fa-solid fa-lock"></i> Password</label>
     <input id="loginPassword" type="password" placeholder="Password" required>
    </div>
 
@@ -290,24 +50,26 @@ th{background:#fafafa}
  <div class="side-logo">PS <span>MART</span></div>
 
  <div class="nav">
-  <button class="active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
-  <button onclick="showSection('products',this)">⌚ Products</button>
-  <button onclick="showSection('orders',this)">🛒 Orders</button>
-  <button onclick="showSection('homepage',this)">🏠 Homepage</button>
-  <button onclick="showSection('store',this)">⚙️ Store Settings</button>
-  <button onclick="showSection('pages',this)">📄 Pages</button>
-  <button onclick="showSection('social',this)">📱 Social Links</button>
+  <button class="active" onclick="showSection('dashboard',this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+  <button onclick="showSection('products',this)"><i class="fa-solid fa-box"></i> Products</button>
+  <button onclick="showSection('orders',this)"><i class="fa-solid fa-cart-shopping"></i> Orders</button>
+  <button onclick="showSection('homepage',this)"><i class="fa-solid fa-house"></i> Homepage</button>
+  <button onclick="showSection('store',this)"><i class="fa-solid fa-gear"></i> Store Settings</button>
+  <button onclick="showSection('pages',this)"><i class="fa-solid fa-file-lines"></i> Pages</button>
+  <button onclick="showSection('social',this)"><i class="fa-brands fa-hashtag"></i> Social Links</button>
  </div>
 
- <button class="btn btn-danger logout" onclick="logout()">Logout</button>
+ <button class="btn btn-danger logout" onclick="logoutAdmin()">
+  <i class="fa-solid fa-right-from-bracket"></i> Logout
+ </button>
 </aside>
 
 <main class="main">
 
 <div class="top">
- <button class="btn btn-dark mobile-menu" onclick="toggleSidebar()">☰</button>
+ <button class="btn btn-dark mobile-menu" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
  <h1 id="pageTitle">Dashboard</h1>
- <button class="btn btn-red" onclick="loadEverything()">↻ Refresh</button>
+ <button class="btn btn-red" onclick="loadEverything()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
 </div>
 
 <!-- ================= DASHBOARD ================= -->
@@ -403,8 +165,8 @@ th{background:#fafafa}
   </div>
 
   <div class="actions">
-   <button class="btn btn-red" onclick="saveProduct()">Save Product</button>
-   <button class="btn btn-light" onclick="clearProductForm()">Clear</button>
+   <button class="btn btn-red" onclick="saveProduct()"><i class="fa-solid fa-floppy-disk"></i> Save Product</button>
+   <button class="btn btn-light" onclick="clearProductForm()"><i class="fa-solid fa-eraser"></i> Clear</button>
   </div>
  </div>
 
@@ -475,7 +237,7 @@ th{background:#fafafa}
   <div class="check"><input id="showSale" type="checkbox"><label>Show Sale Section</label></div>
   <div class="check"><input id="showNewsletter" type="checkbox"><label>Show Newsletter</label></div>
 
-  <button class="btn btn-red" onclick="saveHomepage()">Save Homepage</button>
+  <button class="btn btn-red" onclick="saveSettings('homepage')"><i class="fa-solid fa-floppy-disk"></i> Save Homepage</button>
  </div>
 </section>
 
@@ -498,7 +260,7 @@ th{background:#fafafa}
   
   <div class="check"><input id="whatsappEnabled" type="checkbox"><label>Enable WhatsApp Button</label></div>
 
-  <button class="btn btn-red" onclick="saveStore()">Save Store Settings</button>
+  <button class="btn btn-red" onclick="saveSettings('store')"><i class="fa-solid fa-floppy-disk"></i> Save Store Settings</button>
  </div>
 </section>
 
@@ -512,7 +274,7 @@ th{background:#fafafa}
   <div class="field"><label>Privacy Policy</label><textarea id="privacyText"></textarea></div>
   <div class="field"><label>Terms & Conditions</label><textarea id="termsText"></textarea></div>
 
-  <button class="btn btn-red" onclick="savePages()">Save Pages</button>
+  <button class="btn btn-red" onclick="saveSettings('pages')"><i class="fa-solid fa-floppy-disk"></i> Save Pages</button>
  </div>
 </section>
 
@@ -521,372 +283,17 @@ th{background:#fafafa}
  <div class="panel">
   <h2>Social Media Links</h2>
   <div class="grid">
-   <div class="field"><label>Facebook</label><input id="facebook" placeholder="https://facebook.com/..."></div>
-   <div class="field"><label>Instagram</label><input id="instagram" placeholder="https://instagram.com/..."></div>
-   <div class="field"><label>TikTok</label><input id="tiktok" placeholder="https://tiktok.com/@..."></div>
-   <div class="field"><label>YouTube</label><input id="youtube" placeholder="https://youtube.com/..."></div>
+   <div class="field"><label><i class="fa-brands fa-facebook"></i> Facebook</label><input id="facebook" placeholder="https://facebook.com/..."></div>
+   <div class="field"><label><i class="fa-brands fa-instagram"></i> Instagram</label><input id="instagram" placeholder="https://instagram.com/..."></div>
+   <div class="field"><label><i class="fa-brands fa-tiktok"></i> TikTok</label><input id="tiktok" placeholder="https://tiktok.com/@..."></div>
+   <div class="field"><label><i class="fa-brands fa-youtube"></i> YouTube</label><input id="youtube" placeholder="https://youtube.com/..."></div>
   </div>
-  <button class="btn btn-red" onclick="saveSocial()">Save Social Links</button>
+  <button class="btn btn-red" onclick="saveSettings('social')"><i class="fa-solid fa-floppy-disk"></i> Save Social Links</button>
  </div>
 </section>
 
 </main>
 </div>
 
-<script>
-/* =====================================================
-   SUPABASE CONFIG
-   Replace with your actual keys from Supabase Dashboard
-   ===================================================== */
-const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
-
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-/* =====================================================
-   UTILITY FUNCTIONS
-   ===================================================== */
-function escapeHtml(unsafe) {
-  if(!unsafe) return "";
-  return unsafe.toString()
-       .replace(/&/g, "&amp;")
-       .replace(/</g, "&lt;")
-       .replace(/>/g, "&gt;")
-       .replace(/"/g, "&quot;")
-       .replace(/'/g, "&#039;");
-}
-function escapeAttr(unsafe) {
-  return escapeHtml(unsafe);
-}
-
-/* =====================================================
-   LOGIN / AUTHENTICATION
-   ===================================================== */
-const loginPage = document.getElementById("loginPage");
-const app = document.getElementById("app");
-
-document.getElementById("loginForm").addEventListener("submit", async e => {
- e.preventDefault();
- const email = document.getElementById("loginEmail").value.trim();
- const password = document.getElementById("loginPassword").value;
- const error = document.getElementById("loginError");
-
- error.textContent = "Logging in...";
-
- const {data, error:loginError} = await db.auth.signInWithPassword({
-   email, password
- });
-
- if(loginError){
-   error.textContent = loginError.message;
-   return;
- }
- if(data.user){
-   error.textContent = "";
-   showApp();
- }
-});
-
-async function checkLogin(){
- const {data} = await db.auth.getSession();
- if(data.session){
-   showApp();
- }else{
-   showLogin();
- }
-}
-
-function showLogin(){
- loginPage.style.display="flex";
- app.style.display="none";
-}
-
-function showApp(){
- loginPage.style.display="none";
- app.style.display="block";
- loadEverything();
-}
-
-async function logout(){
- await db.auth.signOut();
- showLogin();
-}
-
-/* =====================================================
-   NAVIGATION
-   ===================================================== */
-const titles = {
- dashboard:"Dashboard", products:"Products", orders:"Orders",
- homepage:"Homepage Settings", store:"Store Settings",
- pages:"Website Pages", social:"Social Links"
-};
-
-function showSection(id,btn){
- document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
- if(btn) btn.classList.add("active");
- document.getElementById("pageTitle").textContent = titles[id] || "Admin Panel";
- document.getElementById("sidebar").classList.remove("open");
-}
-
-function toggleSidebar(){
- document.getElementById("sidebar").classList.toggle("open");
-}
-
-/* =====================================================
-   LOAD EVERYTHING
-   ===================================================== */
-async function loadEverything(){
- await Promise.all([
-   loadProducts(),
-   loadOrders(),
-   loadStore(),
-   loadHomepage(),
-   loadPages(),
-   loadSocial()
- ]);
- updateDashboard();
-}
-
-async function updateDashboard(){
-  try {
-    // Product count
-    const {count: pCount} = await db.from("products").select('*', {count: 'exact', head: true});
-    document.getElementById("totalProducts").textContent = pCount || 0;
-
-    // Orders Stats (Will fail gracefully if orders table doesn't exist yet)
-    const {data: orders, error: oError} = await db.from("orders").select('*');
-    if(!oError && orders) {
-      document.getElementById("totalOrders").textContent = orders.length;
-      document.getElementById("pendingOrders").textContent = orders.filter(o => o.status === 'Pending').length;
-      const sales = orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
-      document.getElementById("totalSales").textContent = "PKR " + sales.toLocaleString();
-    }
-  } catch(e) {
-    console.log("Dashboard stats error (likely missing tables): ", e);
-  }
-}
-
-/* =====================================================
-   PRODUCTS
-   ===================================================== */
-async function loadProducts(){
- const {data,error} = await db.from("products").select("*").order("created_at",{ascending:false});
- const table = document.getElementById("productsTable");
- table.innerHTML = "";
-
- if(error || !data || !data.length){
-   table.innerHTML = `<tr><td colspan="6">No products found.</td></tr>`;
-   return;
- }
-
- data.forEach(p=>{
-  table.innerHTML += `
-   <tr>
-    <td>${p.image_url ? `<img class="product-img" src="${escapeAttr(p.image_url)}">` : "—"}</td>
-    <td>${escapeHtml(p.name || "")}</td>
-    <td>${escapeHtml(p.category || "")}</td>
-    <td>PKR ${Number(p.price||0).toLocaleString()}</td>
-    <td>${p.stock ?? 0}</td>
-    <td>
-     <button class="btn btn-dark" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
-     <button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
-    </td>
-   </tr>
-  `;
- });
-}
-
-async function saveProduct(){
- const id = document.getElementById("productId").value;
- const product = {
-  name: document.getElementById("pName").value.trim(),
-  category: document.getElementById("pCategory").value,
-  price: Number(document.getElementById("pPrice").value || 0),
-  old_price: Number(document.getElementById("pOldPrice").value || 0) || null,
-  stock: Number(document.getElementById("pStock").value || 0),
-  sku: document.getElementById("pSku").value.trim() || null,
-  image_url: document.getElementById("pImage").value.trim() || null,
-  description: document.getElementById("pDescription").value.trim(),
-  featured: document.getElementById("pFeatured").checked,
-  sale: document.getElementById("pSale").checked,
-  updated_at: new Date().toISOString()
- };
-
- if(!product.name){ alert("Product name required."); return; }
-
- let result;
- if(id){
-  result = await db.from("products").update(product).eq("id",id);
- }else{
-  result = await db.from("products").insert(product);
- }
-
- if(result.error){
-  alert(result.error.message); return;
- }
- alert(id ? "Product updated." : "Product added.");
- clearProductForm();
- loadProducts();
- updateDashboard();
-}
-
-function editProduct(p){
- document.getElementById("productId").value=p.id;
- document.getElementById("pName").value=p.name || "";
- document.getElementById("pCategory").value=p.category || "Men";
- document.getElementById("pPrice").value=p.price || "";
- document.getElementById("pOldPrice").value=p.old_price || "";
- document.getElementById("pStock").value=p.stock || "";
- document.getElementById("pSku").value=p.sku || "";
- document.getElementById("pImage").value=p.image_url || "";
- document.getElementById("pDescription").value=p.description || "";
- document.getElementById("pFeatured").checked=!!p.featured;
- document.getElementById("pSale").checked=!!p.sale;
- document.getElementById("productFormTitle").textContent = "Edit Product";
- window.scrollTo({top:0,behavior:"smooth"});
-}
-
-async function deleteProduct(id){
- if(!confirm("Delete this product?")) return;
- const {error} = await db.from("products").delete().eq("id",id);
- if(error){ alert(error.message); return; }
- loadProducts();
- updateDashboard();
-}
-
-// ----> This is where your code was cut off, it is now completed!
-function clearProductForm(){
- document.getElementById("productId").value="";
- document.getElementById("pName").value="";
- document.getElementById("pCategory").value="Men";
- document.getElementById("pPrice").value="";
- document.getElementById("pOldPrice").value="";
- document.getElementById("pStock").value="";
- document.getElementById("pSku").value="";
- document.getElementById("pImage").value="";
- document.getElementById("pDescription").value="";
- document.getElementById("pFeatured").checked=false;
- document.getElementById("pSale").checked=false;
- document.getElementById("productFormTitle").textContent="Add Product";
-}
-
-/* =====================================================
-   ORDERS (Requires an "orders" table in Supabase)
-   ===================================================== */
-async function loadOrders(){
- try {
-   const {data, error} = await db.from("orders").select("*").order("created_at",{ascending:false});
-   const table = document.getElementById("ordersTable");
-   
-   if(error || !data || !data.length){
-     table.innerHTML = `<tr><td colspan="7">No orders found.</td></tr>`;
-     return;
-   }
-   
-   table.innerHTML = data.map(o => `
-    <tr>
-     <td>${escapeHtml(o.customer_name)}</td>
-     <td>${escapeHtml(o.phone)}</td>
-     <td>PKR ${o.total}</td>
-     <td>${escapeHtml(o.payment_method)}</td>
-     <td><span class="status">${escapeHtml(o.status)}</span></td>
-     <td>${new Date(o.created_at).toLocaleDateString()}</td>
-     <td><button class="btn btn-dark btn-sm">View</button></td>
-    </tr>
-   `).join("");
- } catch(e) {
-   document.getElementById("ordersTable").innerHTML = `<tr><td colspan="7">Order table not configured.</td></tr>`;
- }
-}
-
-
-/* =====================================================
-   SETTINGS (HOMEPAGE, STORE, PAGES, SOCIAL)
-   Saving to LocalStorage so they work immediately without 
-   requiring you to create extra tables in Supabase. 
-   ===================================================== */
-
-// 1. Homepage
-function loadHomepage() {
- const data = JSON.parse(localStorage.getItem("ps_homepage")) || {};
- ['topbarText','heroSmall','heroTitle','heroButton','heroImage','heroDescription',
-  'featuredTitle','saleTitle','saleDescription'].forEach(id => {
-    if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
- });
- ['showCategories','showFeatured','showSale','showNewsletter'].forEach(id => {
-    if(document.getElementById(id)) document.getElementById(id).checked = data[id] ?? true;
- });
-}
-function saveHomepage() {
- const data = {};
- ['topbarText','heroSmall','heroTitle','heroButton','heroImage','heroDescription',
-  'featuredTitle','saleTitle','saleDescription'].forEach(id => data[id] = document.getElementById(id).value);
- ['showCategories','showFeatured','showSale','showNewsletter'].forEach(id => data[id] = document.getElementById(id).checked);
- localStorage.setItem("ps_homepage", JSON.stringify(data));
- alert("Homepage settings saved!");
-}
-
-// 2. Store
-function loadStore() {
- const data = JSON.parse(localStorage.getItem("ps_store")) || {};
- ['storeName','logoText','supportNumber','whatsappNumber','storeEmail',
-  'currency','deliveryCharges','country','storeAddress','whatsappMessage'].forEach(id => {
-    if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
- });
- if(document.getElementById("whatsappEnabled")) {
-   document.getElementById("whatsappEnabled").checked = data.whatsappEnabled ?? true;
- }
-}
-function saveStore() {
- const data = {};
- ['storeName','logoText','supportNumber','whatsappNumber','storeEmail',
-  'currency','deliveryCharges','country','storeAddress','whatsappMessage'].forEach(id => {
-    data[id] = document.getElementById(id).value;
- });
- data.whatsappEnabled = document.getElementById("whatsappEnabled").checked;
- localStorage.setItem("ps_store", JSON.stringify(data));
- alert("Store settings saved!");
-}
-
-// 3. Pages
-function loadPages() {
- const data = JSON.parse(localStorage.getItem("ps_pages")) || {};
- ['aboutText','shippingText','returnText','privacyText','termsText'].forEach(id => {
-   if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
- });
-}
-function savePages() {
- const data = {};
- ['aboutText','shippingText','returnText','privacyText','termsText'].forEach(id => {
-   data[id] = document.getElementById(id).value;
- });
- localStorage.setItem("ps_pages", JSON.stringify(data));
- alert("Pages saved!");
-}
-
-// 4. Social
-function loadSocial() {
- const data = JSON.parse(localStorage.getItem("ps_social")) || {};
- ['facebook','instagram','tiktok','youtube'].forEach(id => {
-   if(document.getElementById(id)) document.getElementById(id).value = data[id] || "";
- });
-}
-function saveSocial() {
- const data = {};
- ['facebook','instagram','tiktok','youtube'].forEach(id => {
-   data[id] = document.getElementById(id).value;
- });
- localStorage.setItem("ps_social", JSON.stringify(data));
- alert("Social links saved!");
-}
-
-/* =====================================================
-   INITIALIZE
-   ===================================================== */
-checkLogin();
-
-</script>
 </body>
 </html>
